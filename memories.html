@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hurin's space</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for smooth scrolling and animations */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .carousel {
+            animation: scroll 30s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(calc(-250px * 8));
+            }
+        }
+
+        .carousel:hover {
+            animation-play-state: paused;
+        }
+
+        /* Music player progress bar */
+        .progress-bar {
+            height: 4px;
+            background-color: #e0e5ec;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #8b9dc3;
+            width: 45%;
+            border-radius: 2px;
+        }
+
+        /* Rotating album art */
+        .album-art {
+            animation: rotate 20s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .music-card:hover .album-art {
+            animation-play-state: running;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Floating hearts background */
+        .hearts-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            display: block;
+            width: 50px;
+            height: 50px;
+            color: #8b9dc3;
+            opacity: 0.3;
+            animation: float 15s linear infinite;
+            font-size: 1.5rem;
+        }
+
+        /* Update the heart positions to distribute them vertically */
+        .heart:nth-child(1) {
+            left: 15%;
+            top: 10%;
+            animation-delay: 0s;
+            transform: scale(0.8);
+        }
+
+        .heart:nth-child(2) {
+            left: 75%;
+            top: 15%;
+            animation-delay: -1s;
+            transform: scale(0.7);
+        }
+
+        .heart:nth-child(3) {
+            left: 25%;
+            top: 30%;
+            animation-delay: -2s;
+            transform: scale(0.9);
+        }
+
+        .heart:nth-child(4) {
+            left: 65%;
+            top: 40%;
+            animation-delay: -3s;
+            transform: scale(0.6);
+        }
+
+        .heart:nth-child(5) {
+            left: 10%;
+            top: 55%;
+            animation-delay: -4s;
+            transform: scale(0.8);
+        }
+
+        .heart:nth-child(6) {
+            left: 80%;
+            top: 60%;
+            animation-delay: -5s;
+            transform: scale(0.7);
+        }
+
+        .heart:nth-child(7) {
+            left: 45%;
+            top: 70%;
+            animation-delay: -6s;
+            transform: scale(0.9);
+        }
+
+        .heart:nth-child(8) {
+            left: 30%;
+            top: 20%;
+            animation-delay: -7s;
+            transform: scale(0.6);
+        }
+
+        .heart:nth-child(9) {
+            left: 60%;
+            top: 25%;
+            animation-delay: -8s;
+            transform: scale(0.8);
+        }
+
+        .heart:nth-child(10) {
+            left: 20%;
+            top: 80%;
+            animation-delay: -9s;
+            transform: scale(0.7);
+        }
+
+        .heart:nth-child(11) {
+            left: 70%;
+            top: 85%;
+            animation-delay: -10s;
+            transform: scale(0.9);
+        }
+
+        .heart:nth-child(12) {
+            left: 40%;
+            top: 45%;
+            animation-delay: -11s;
+            transform: scale(0.6);
+        }
+
+        .heart:nth-child(13) {
+            left: 85%;
+            top: 50%;
+            animation-delay: -12s;
+            transform: scale(0.8);
+        }
+
+        .heart:nth-child(14) {
+            left: 15%;
+            top: 65%;
+            animation-delay: -13s;
+            transform: scale(0.7);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(var(--scale, 0.6));
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-20vh) rotate(360deg) scale(var(--scale, 0.6));
+                opacity: 0;
+            }
+        }
+
+        .envelope {
+            position: absolute;
+            width: 400px;
+            height: 250px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            margin: 0 auto;
+        }
+
+        .envelope:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 200px solid transparent;
+            border-right: 200px solid transparent;
+            border-top: 125px solid #e8e8e8;
+            transform-origin: top;
+            transform: rotateX(0deg);
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .envelope.open:before {
+            transform: rotateX(180deg);
+        }
+
+        .envelope:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 200px solid transparent;
+            border-right: 200px solid transparent;
+            border-bottom: 125px solid #e0e0e0;
+            z-index: 1;
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #f5f5f5;
+            border-radius: 8px;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .envelope-content {
+            position: absolute;
+            width: 380px;
+            height: 230px;
+            background: white;
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            top: -230px;
+            left: 10px;
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 2;
+        }
+
+        .envelope.open .envelope-content {
+            top: -250px;
+            opacity: 1;
+            transition-delay: 0.3s;
+        }
+
+        .open-btn {
+            background: #8b9dc3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .open-btn:hover {
+            background: #6a7ba2;
+            transform: translateY(-2px);
+        }
+
+        /* Gallery animations */
+        .gallery-item {
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .gallery-item.animate-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+    /* CSS Flower Styles */
+    .flower {
+        position: relative;
+        width: 120px;
+        height: 200px;
+        margin: 0 auto;
+        animation: sway 5s ease-in-out infinite;
+    }
+    
+    .flower-center {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: #f9ca24;
+        border-radius: 50%;
+        top: 50px;
+        left: 45px;
+        z-index: 10;
+        box-shadow: 0 0 10px rgba(249, 202, 36, 0.7);
+    }
+    
+    .petal {
+        position: absolute;
+        width: 40px;
+        height: 60px;
+        background: #ff9ff3;
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        top: 40px;
+        left: 40px;
+        transform-origin: bottom center;
+        box-shadow: 0 0 10px rgba(255, 159, 243, 0.5);
+    }
+    
+    .p1 { transform: rotate(0deg) translateY(-20px); background: #feca57; }
+    .p2 { transform: rotate(45deg) translateY(-20px); background: #ff9ff3; }
+    .p3 { transform: rotate(90deg) translateY(-20px); background: #f368e0; }
+    .p4 { transform: rotate(135deg) translateY(-20px); background: #ff9ff3; }
+    .p5 { transform: rotate(180deg) translateY(-20px); background: #feca57; }
+    .p6 { transform: rotate(225deg) translateY(-20px); background: #ff9ff3; }
+    .p7 { transform: rotate(270deg) translateY(-20px); background: #f368e0; }
+    .p8 { transform: rotate(315deg) translateY(-20px); background: #ff9ff3; }
+    
+    .stem {
+        position: absolute;
+        width: 8px;
+        height: 120px;
+        background: #1dd1a1;
+        top: 100px;
+        left: 56px;
+        z-index: -1;
+        border-radius: 0 0 5px 5px;
+    }
+    
+    .leaf {
+        position: absolute;
+        width: 30px;
+        height: 15px;
+        background: #10ac84;
+        border-radius: 50% 50% 0 50%;
+        z-index: -1;
+    }
+    
+    .l1 {
+        top: 120px;
+        left: 30px;
+        transform: rotate(-30deg);
+    }
+    
+    .l2 {
+        top: 150px;
+        left: 70px;
+        transform: rotate(140deg) scaleX(-1);
+    }
+    
+    @keyframes sway {
+        0%, 100% { transform: rotate(-3deg); }
+        50% { transform: rotate(3deg); }
+    }
+    
+    .flower:hover .petal {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: rotate(var(--rot)) translateY(-20px) scale(1); }
+        50% { transform: rotate(var(--rot)) translateY(-20px) scale(1.1); }
+    }
+    
+    .p1 { --rot: 0deg; }
+    .p2 { --rot: 45deg; }
+    .p3 { --rot: 90deg; }
+    .p4 { --rot: 135deg; }
+    .p5 { --rot: 180deg; }
+    .p6 { --rot: 225deg; }
+    .p7 { --rot: 270deg; }
+    .p8 { --rot: 315deg; }
+    </style>
+</head>
+
+<body class="bg-[#fafafa] font-sans">
+    <!-- Floating Navbar -->
+    <nav
+        class="fixed top-8 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg z-50 px-6 py-3 flex items-center space-x-6">
+        <a href="#letter" class="text-[#8b9dc3] hover:text-[#6a7ba2] transition-colors font-medium">Letter</a>
+        <a href="#music" class="text-[#8b9dc3] hover:text-[#6a7ba2] transition-colors font-medium">Music</a>
+        <a href="#memories" class="text-[#8b9dc3] hover:text-[#6a7ba2] transition-colors font-medium">Memories</a>
+        <a href="#gallery" class="text-[#8b9dc3] hover:text-[#6a7ba2] transition-colors font-medium">Gallery</a>
+        <div class="w-1 h-6 bg-[#e0e5ec] rounded-full"></div>
+        <a href="#" class="text-[#8b9dc3] hover:text-[#6a7ba2] transition-colors font-medium">About</a>
+    </nav>
+
+    <!-- Letter Section with envelope -->
+    <section id="letter" class="min-h-screen flex items-center justify-center px-4 pt-20 pb-10 relative">
+        <div class="hearts-bg">
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+        </div>
+
+        <div class="max-w-3xl mx-auto fade-in flex flex-col items-center">
+            <div class="envelope" id="envelope">
+                <div class="envelope-front">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-[#8b9dc3] mb-4" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <button class="open-btn" id="openBtn">Open Letter</button>
+                </div>
+                <div class="envelope-content">
+                    <h1 class="text-3xl md:text-4xl font-light text-[#6a7ba2] mb-6">To Hurin, my dearest person</h1>
+                    <div class="space-y-4 text-[#5a6a8a] leading-relaxed">
+                        <p>Welcome to this quiet space that i made specially for you...</p>
+                        <!-- Rest of your letter content -->
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Full letter content (hidden by default, shown after envelope opens) -->
+            <div id="fullLetter"
+                class="hidden bg-white/90 p-8 rounded-xl shadow-sm border border-[#e0e5ec] mt-8 w-full">
+                <h1 class="text-3xl md:text-4xl font-light text-[#6a7ba2] mb-6">To Hurin, my dearest person</h1>
+                <div class="space-y-4 text-[#5a6a8a] leading-relaxed">
+                    <p>Welcome to this quiet space that i made specially for you. This space is created with the
+                        intention of celebrating our monthsary or 1 year 9 month's of our relationship!</p>
+                    <p>Section pertama ni is just some sort of letter or message that i nak bagitau you.</p>
+                    <p>Here you akan dapat cari gambar gambar kita or especially YOU that we took during our dates from
+                        start to end :D</p>
+                    <p>This is so that kita boleh tengok balik everything that we go through together hard times, good
+                        times, and times that are normal. </p>
+                    <p>Take your time sayang, There's no hurry here.</p>
+                </div>
+                <div class="mt-8 pt-4 border-t border-[#e0e5ec]">
+                    <p class="text-[#6a7ba2]">With warmth,</p>
+                    <p class="text-xl font-light text-[#8b9dc3]">Danish Syazwan</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Music Player Section -->
+    <section id="music" class="min-h-[70vh] flex items-center justify-center px-4 py-16 bg-white">
+        <div class="max-w-md w-full mx-auto fade-in">
+            <div
+                class="music-card bg-white/90 p-6 rounded-xl shadow-sm border border-[#e0e5ec] hover:shadow-md transition-shadow">
+                <!-- Audio Element (hidden) -->
+                <audio id="audioPlayer" src="/assets/DAISIES.mp3" autoplay></audio>
+
+                <div class="flex items-center space-x-6">
+                    <div
+                        class="album-art w-24 h-24 rounded-lg overflow-hidden bg-[#dfe7f6] flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-[#6a7ba2]" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                        </svg>
+                        <img src="/assets/musicimage.jpg" alt=""
+                            class="border-2 border-[#8b9dc3] rounded-lg absolute w-full h-full object-cover transition-transform duration-500 ease-in-out">
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-light text-[#6a7ba2]">Current Soundtrack</h3>
+                        <h2 class="text-2xl font-normal text-[#5a6a8a] mt-1" id="songTitle">Daisies</h2>
+                        <p class="text-[#8b9dc3] mt-1" id="artistName">C++ Playlist</p>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <div class="progress-bar">
+                        <div class="progress" id="progressBar"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-[#8b9dc3] mt-1">
+                        <span id="currentTime">0:00</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-center space-x-8 mt-6">
+                    <button class="text-[#6a7ba2] hover:text-[#5a6a8a]" id="prevBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button class="text-[#6a7ba2] hover:text-[#5a6a8a] bg-[#e0e5ec] rounded-full p-3" id="playPauseBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" id="playPauseIcon">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
+                    <button class="text-[#6a7ba2] hover:text-[#5a6a8a]" id="nextBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-[#8b9dc3] italic">"Musics are as beautiful as our memories"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Memories Section -->
+    <section id="memories" class="min-h-screen bg-[#f5f7fa] py-20 px-4">
+        <div class="hearts-bg">
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+            <div class="heart">♥</div>
+        </div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-light text-[#6a7ba2] mb-1 text-center">Moments Captured of Our Dates!</h2>
+            <h2 class="text-md font-light text-[#6a7ba2]/60 mb-12 text-center">we love to eat...</h2>
+
+            <!-- Carousel Container -->
+            <div class="relative h-64 overflow-hidden">
+                <div class="carousel flex space-x-6 absolute left-0">
+                    <!-- Carousel Items - Repeat these for infinite scrolling effect -->
+                    <div class="w-60 h-60 bg-[#dfe7f6] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image1.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+                    </div>
+                    <div class="w-60 h-60 bg-[#e8f0f9] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image2.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+                    </div>
+                    <div class="w-60 h-60 bg-[#dfe7f6] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image3.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+                    </div>
+                    <div class="w-60 h-60 bg-[#e8f0f9] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image4.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+                    </div>
+                    <div class="w-60 h-60 bg-[#dfe7f6] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image5.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+                    </div>
+                    <div class="w-60 h-60 bg-[#e8f0f9] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image6.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+
+                    </div>
+                    <div class="w-60 h-60 bg-[#dfe7f6] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image7.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+
+                    </div>
+                    <div class="w-60 h-60 bg-[#e8f0f9] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image8.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+
+                    </div>
+                    <!-- Duplicate items for seamless looping -->
+                    <div class="w-60 h-60 bg-[#dfe7f6] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image1.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+
+                    </div>
+                    <div class="w-60 h-60 bg-[#e8f0f9] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image2.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+
+                    </div>
+                    <div class="w-60 h-60 bg-[#dfe7f6] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image3.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+
+                    </div>
+                    <div class="w-60 h-60 bg-[#e8f0f9] rounded-lg flex items-center justify-center shadow-sm p-2">
+                        <img src="/assets/image4.jpg" class="w-full h-full object-cover rounded-lg" alt="Memory 1">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16 text-center">
+                <p class="text-[#6a7ba2] max-w-2xl mx-auto leading-relaxed">
+                    Hover over the images to pause their journey. Each represents a moment worth holding onto - a visual
+                    whisper from days gone by.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+<section id="gallery" class="min-h-screen bg-white py-20 px-4">
+    <div class="max-w-4xl mx-auto"> <!-- Changed max-width to make it narrower -->
+        <h2 class="text-3xl font-light text-[#6a7ba2] mb-1 text-center">Our Beautiful Gallery</h2>
+        <h2 class="text-md font-light text-[#6a7ba2]/60 mb-16 text-center">every picture tells our story...</h2>
+
+        <!-- Gallery Stack - One by one -->
+        <div class="flex flex-col items-center space-y-8"> <!-- Changed to flex column with spacing -->
+            <!-- Gallery Item 1 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="0">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo1.jpg" alt="Gallery 1" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 1</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 2 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="200">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo2.jpg" alt="Gallery 2" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 2</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 3 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="400">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo3.jpg" alt="Gallery 3" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 3</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 4 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="600">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo4.jpg" alt="Gallery 4" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 4</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 5 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="800">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo5.jpg" alt="Gallery 5" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 5</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 6 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="1000">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo6.jpg" alt="Gallery 6" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 6</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 7 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="1200">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo7.jpg" alt="Gallery 7" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 7</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 8 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="1400">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo8.jpg" alt="Gallery 8" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 8</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 9 -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="1600">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500">
+                    <img src="/assets/memo9.jpg" alt="Gallery 9" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Moment 9</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Item 10 - CSS Flower -->
+            <div class="gallery-item opacity-0 transform translate-y-8 w-full max-w-lg" data-delay="1800">
+                <div class="relative group overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-500 flex items-center justify-center h-80 bg-gradient-to-br from-[#f9f0ff] to-[#e0f7fa]">
+                    <!-- CSS Flower -->
+                    <div class="flower">
+                        <div class="flower-center"></div>
+                        <div class="petal p1"></div>
+                        <div class="petal p2"></div>
+                        <div class="petal p3"></div>
+                        <div class="petal p4"></div>
+                        <div class="petal p5"></div>
+                        <div class="petal p6"></div>
+                        <div class="petal p7"></div>
+                        <div class="petal p8"></div>
+                        <div class="stem"></div>
+                        <div class="leaf l1"></div>
+                        <div class="leaf l2"></div>
+                    </div>
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <p class="text-sm font-light">Our Blossoming Love</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-16 text-center">
+            <p class="text-[#6a7ba2] max-w-2xl mx-auto leading-relaxed">
+                These moments, frozen in time, remind us of the beautiful journey we've shared together. Each image holds a piece of our hearts.
+            </p>
+        </div>
+    </div>
+</section>
+
+    <script>
+        // Envelope interaction
+        document.getElementById('openBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const envelope = document.getElementById('envelope');
+            const fullLetter = document.getElementById('fullLetter');
+            
+            envelope.classList.add('open');
+            
+            // After animation completes, show full letter and hide envelope
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                fullLetter.classList.remove('hidden');
+            }, 1000);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playPauseIcon = document.getElementById('playPauseIcon');
+            const progressBar = document.getElementById('progressBar');
+            const currentTimeElement = document.getElementById('currentTime');
+            const durationElement = document.getElementById('duration');
+
+            // Update progress bar as audio plays
+            audioPlayer.addEventListener('timeupdate', function () {
+                const currentTime = audioPlayer.currentTime;
+                const duration = audioPlayer.duration;
+
+                // Update progress bar width
+                if (duration) {
+                    const progressPercent = (currentTime / duration) * 100;
+                    progressBar.style.width = `${progressPercent}%`;
+                }
+
+                // Update time display
+                currentTimeElement.textContent = formatTime(currentTime);
+            });
+
+            // Update total duration when metadata is loaded
+            audioPlayer.addEventListener('loadedmetadata', function () {
+                durationElement.textContent = formatTime(audioPlayer.duration);
+            });
+
+            // Play/Pause functionality
+            playPauseBtn.addEventListener('click', function () {
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                    playPauseIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />';
+                } else {
+                    audioPlayer.pause();
+                    playPauseIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />';
+                }
+            });
+
+            // Click on progress bar to seek
+            document.querySelector('.progress-bar').addEventListener('click', function (e) {
+                const percent = e.offsetX / this.offsetWidth;
+                audioPlayer.currentTime = percent * audioPlayer.duration;
+            });
+
+            // Format time (seconds to MM:SS)
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            // Optional: Add functionality for next/previous buttons
+            // You would need to implement a playlist system for full functionality
+            document.getElementById('nextBtn').addEventListener('click', function () {
+                // Implement your next song logic here
+            });
+
+            document.getElementById('prevBtn').addEventListener('click', function () {
+                // Implement your previous song logic here
+            });
+        });
+
+        // Gallery scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.getAttribute('data-delay');
+                    setTimeout(() => {
+                        entry.target.classList.add('animate-in');
+                    }, parseInt(delay));
+                }
+            });
+        }, observerOptions);
+
+        // Observe all gallery items
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        // Simple script to highlight active nav link when scrolling
+        document.addEventListener('DOMContentLoaded', function () {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+
+            window.addEventListener('scroll', function () {
+                let current = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+
+                    if (pageYOffset >= (sectionTop - 300)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('text-[#6a7ba2]', 'font-semibold');
+                    link.classList.add('text-[#8b9dc3]');
+
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.remove('text-[#8b9dc3]');
+                        link.classList.add('text-[#6a7ba2]', 'font-semibold');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

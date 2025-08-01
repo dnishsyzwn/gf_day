@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Floating hearts background */
+        .hearts-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            display: block;
+            width: 30px;
+            height: 30px;
+            color: #8b9dc3;
+            opacity: 0.3;
+            animation: float 15s linear infinite;
+            font-size: 1.5rem;
+        }
+
+        /* Heart positions */
+        .heart:nth-child(1) { left: 15%; top: 10%; animation-delay: 0s; transform: scale(0.8); }
+        .heart:nth-child(2) { left: 75%; top: 15%; animation-delay: -1s; transform: scale(0.7); }
+        .heart:nth-child(3) { left: 25%; top: 30%; animation-delay: -2s; transform: scale(0.9); }
+        .heart:nth-child(4) { left: 65%; top: 40%; animation-delay: -3s; transform: scale(0.6); }
+        .heart:nth-child(5) { left: 10%; top: 55%; animation-delay: -4s; transform: scale(0.8); }
+        .heart:nth-child(6) { left: 80%; top: 60%; animation-delay: -5s; transform: scale(0.7); }
+        .heart:nth-child(7) { left: 45%; top: 70%; animation-delay: -6s; transform: scale(0.9); }
+        .heart:nth-child(8) { left: 30%; top: 20%; animation-delay: -7s; transform: scale(0.6); }
+        .heart:nth-child(9) { left: 60%; top: 25%; animation-delay: -8s; transform: scale(0.8); }
+        .heart:nth-child(10) { left: 20%; top: 80%; animation-delay: -9s; transform: scale(0.7); }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg) scale(var(--scale, 0.6)); opacity: 0; }
+            10% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-20vh) rotate(360deg) scale(var(--scale, 0.6)); opacity: 0; }
+        }
+        
+        /* For the growing button effect */
+        .growing-btn {
+            transition: all 0.3s ease;
+        }
+        
+        /* Fade in animation */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-[#fafafa] font-sans min-h-screen flex items-center justify-center">
+    <!-- Floating hearts background -->
+    <div class="hearts-bg">
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+        <div class="heart">❤</div>
+    </div>
+
+    <!-- Main container - initially shows login form -->
+    <div class="max-w-md w-full mx-auto px-4">
+        <!-- Login Form (shown by default) -->
+        <div id="loginForm" class="bg-white/90 p-8 rounded-xl shadow-sm border border-[#e0e5ec] fade-in">
+            <h1 class="text-3xl font-light text-[#6a7ba2] mb-6 text-center">Special Access</h1>
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-[#5a6a8a] mb-1">Username</label>
+                    <input type="text" id="username" class="w-full px-4 py-2 border border-[#e0e5ec] rounded-lg focus:ring-2 focus:ring-[#8b9dc3] focus:border-[#8b9dc3] outline-none transition">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-[#5a6a8a] mb-1">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border border-[#e0e5ec] rounded-lg focus:ring-2 focus:ring-[#8b9dc3] focus:border-[#8b9dc3] outline-none transition">
+                </div>
+                
+                <button id="loginBtn" class="w-full mt-6 bg-[#8b9dc3] hover:bg-[#6a7ba2] text-white py-2 px-4 rounded-lg transition-colors duration-300">
+                    Enter Special Space
+                </button>
+            </div>
+        </div>
+        
+        <!-- Question Section (hidden by default) -->
+        <div id="questionSection" class="hidden bg-white/90 p-8 rounded-xl shadow-sm border border-[#e0e5ec] mt-6 text-center fade-in">
+            <h2 class="text-3xl font-light text-[#6a7ba2] mb-6">Will you be my gf?</h2>
+            
+            <!-- Cute animal picture (replace src with your image) -->
+            <div class="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden border-4 border-[#8b9dc3]/30">
+                <img src="/assets/willu.jpg" alt="Cute animal" class="w-full h-full object-cover">
+            </div>
+            
+            <div class="flex justify-center space-x-4">
+                <button id="yesBtn" class="growing-btn bg-[#8b9dc3] hover:bg-[#6a7ba2] text-white py-2 px-6 rounded-lg transition-all duration-300">
+                    YES
+                </button>
+                <button id="noBtn" class="growing-btn bg-[#e0e5ec] hover:bg-[#d0d5e0] text-[#5a6a8a] py-2 px-6 rounded-lg transition-colors duration-300">
+                    NO
+                </button>
+            </div>
+        </div>
+        
+        <!-- Success Message (hidden by default) -->
+        <div id="successMessage" class="hidden bg-white/90 p-8 rounded-xl shadow-sm border border-[#e0e5ec] mt-6 text-center fade-in">
+            <h2 class="text-3xl font-light text-[#6a7ba2] mb-4">YAY! ❤️</h2>
+            <p class="text-[#5a6a8a] mb-6">I'm so happy you said yes! Jom tengok next page sama sama.</p>
+            <a href="memories.html" class="inline-block bg-[#8b9dc3] hover:bg-[#6a7ba2] text-white py-2 px-6 rounded-lg transition-colors duration-300">
+                Continue
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+            const questionSection = document.getElementById('questionSection');
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const successMessage = document.getElementById('successMessage');
+            
+            let yesBtnSize = 1; // Track how many times NO has been clicked
+            
+            // Simple login - just checks if both fields have values
+            loginBtn.addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username && password) {
+                    loginForm.classList.add('hidden');
+                    questionSection.classList.remove('hidden');
+                } else {
+                    alert('Please enter both username and password!');
+                }
+            });
+            
+            // YES button clicked
+            yesBtn.addEventListener('click', function() {
+                questionSection.classList.add('hidden');
+                successMessage.classList.remove('hidden');
+                
+                // Create a heart explosion effect
+                for (let i = 0; i < 20; i++) {
+                    createFlyingHeart();
+                }
+            });
+            
+            // NO button clicked - makes YES button bigger
+            noBtn.addEventListener('click', function() {
+                yesBtnSize += 2;
+                yesBtn.style.transform = `scale(${yesBtnSize})`;
+                
+                // Move the NO button randomly to make it harder to click
+                const randomX = Math.random() * 100 - 50;
+                const randomY = Math.random() * 100 - 50;
+                noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            });
+            
+            // Function to create flying hearts animation
+            function createFlyingHeart() {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤';
+                heart.className = 'absolute text-2xl text-[#ff6b6b] animate-fly';
+                
+                // Random start position at bottom
+                const startX = Math.random() * window.innerWidth;
+                heart.style.left = `${startX}px`;
+                heart.style.bottom = '0';
+                
+                // Random end position at top
+                const endX = startX + (Math.random() * 200 - 100);
+                
+                // Add animation
+                heart.style.animation = `flyUp ${2 + Math.random() * 3}s linear forwards`;
+                
+                // Add CSS for the animation
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @keyframes flyUp {
+                        0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+                        100% { transform: translate(${endX - startX}px, -100vh) rotate(360deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                document.body.appendChild(heart);
+                
+                // Remove after animation completes
+                setTimeout(() => {
+                    heart.remove();
+                    style.remove();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
